@@ -1,4 +1,3 @@
--- Zuerst die Tabellen, auf die andere Tabellen verweisen:
 CREATE TABLE Naehrwert (
     naehrwert_id INT PRIMARY KEY,
     fett_pro_einheit DECIMAL(5,2),
