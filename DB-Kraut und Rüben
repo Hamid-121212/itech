@@ -30,7 +30,6 @@ CREATE TABLE Beschraenkung (
     beschraenk_name VARCHAR(50)
 );
 
--- Jetzt die Tabelle, die auf die obigen Tabellen verweist
 CREATE TABLE Kunde (
     kd_nr INT PRIMARY KEY,
     name VARCHAR(50),
