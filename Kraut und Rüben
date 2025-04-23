@@ -1,0 +1,103 @@
+CREATE TABLE Kunde (
+    kd_nr INT PRIMARY KEY,
+    name VARCHAR(50),
+    vorname VARCHAR(50),
+    strasse VARCHAR(100),
+    haus_nr VARCHAR(10),
+    plz VARCHAR(10),
+    stadt VARCHAR(50),
+    geburtsdatum DATE
+);
+
+CREATE TABLE Bestellung (
+    bestell_nr INT PRIMARY KEY,
+    kd_nr INT,
+    gesamtpreis DECIMAL(10,2),
+    datum DATE,
+    FOREIGN KEY (kd_nr) REFERENCES Kunde(kd_nr) );
+
+CREATE TABLE Zutat (
+    zutat_id INT PRIMARY KEY,
+    zutat_name VARCHAR(50),
+    bestand INT,
+    nettoergebnis DECIMAL(10,2),
+    mengeneinheit VARCHAR(20),
+    naehrwert_id INT,
+    lief_nr INT,
+    FOREIGN KEY (naehrwert_id) REFERENCES Naehrwert(naehrwert_id),
+    FOREIGN KEY (lief_nr) REFERENCES Lieferant(lief_nr) );
+
+CREATE TABLE Bestellung_zutat (
+    bestell_nr INT,
+    zutat_id INT,
+    PRIMARY KEY (bestell_nr, zutat_id),
+    FOREIGN KEY (bestell_nr) REFERENCES Bestellung(bestell_nr),
+    FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) );
+
+CREATE TABLE Lieferant (
+    lief_nr INT PRIMARY KEY,
+    name VARCHAR(50),
+    strasse VARCHAR(100),
+    haus_nr VARCHAR(10),
+    plz VARCHAR(10),
+    stadt VARCHAR(50)
+);
+
+CREATE TABLE Naehrwert (
+    naehrwert_id INT PRIMARY KEY,
+    fett_pro_einheit DECIMAL(5,2),
+    kalorien_pro_einheit DECIMAL(5,2),
+    kohlenhydrat_pro_einheit DECIMAL(5,2),
+    protein DECIMAL(5,2)
+);
+
+CREATE TABLE Rezept (
+    rezept_id INT PRIMARY KEY,
+    rezept_name VARCHAR(100),
+    kategorie_id INT,
+    FOREIGN KEY (kategorie_id) REFERENCES Ernaehrungskategorie(kategorie_id)
+);
+
+CREATE TABLE Rezept_zutat (
+    rezept_id INT,
+    zutat_id INT,
+    menge DECIMAL(10,2),
+    PRIMARY KEY (rezept_id, zutat_id),
+    FOREIGN KEY (rezept_id) REFERENCES Rezept(rezept_id),
+    FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) );
+
+CREATE TABLE Rezept_allergen (
+    rezept_id INT,
+    allergen_id INT,
+    PRIMARY KEY (rezept_id, allergen_id),
+    FOREIGN KEY (rezept_id) REFERENCES Rezept(rezept_id),
+    FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) );
+
+CREATE TABLE Allergen (
+    allergen_id INT PRIMARY KEY,
+    allergen_name VARCHAR(50)
+);
+
+CREATE TABLE Ernaehrungskategorie (
+    kategorie_id INT PRIMARY KEY,
+    kategorie_name VARCHAR(50)
+);
+
+CREATE TABLE Beschraenkung (
+    beschraenk_id INT PRIMARY KEY,
+    beschraenk_name VARCHAR(50)
+);
+
+CREATE TABLE Kunde_beschraenkung (
+    kd_nr INT,
+    beschraenk_id INT,
+    PRIMARY KEY (kd_nr, beschraenk_id),
+    FOREIGN KEY (kd_nr) REFERENCES Kunde(kd_nr),
+    FOREIGN KEY (beschraenk_id) REFERENCES Beschraenkung(beschraenk_id) );
+
+CREATE TABLE Zutat_beschraenkung (
+    beschraenk_id INT,
+    zutat_id INT,
+    PRIMARY KEY (beschraenk_id, zutat_id),
+    FOREIGN KEY (beschraenk_id) REFERENCES Beschraenkung(beschraenk_id),
+    FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) );
