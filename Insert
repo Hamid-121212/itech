@@ -52,3 +52,36 @@ INSERT INTO Adresse (adresse_id, strasse, haus_nr, plz, ort_id) VALUES
 (29, 'Rheinische Straße', '18', '44137', 8),
 (30, 'Altmarkt', '2', '01067', 12);
 
+INSERT INTO Kunde (kd_nr, name, vorname, geburtsdatum, adresse_id) VALUES
+(1, 'Müller', 'Anna', '1990-05-15', 1),
+(2, 'Schmidt', 'Lukas', '1985-03-22', 2),
+(3, 'Meier', 'Laura', '1992-08-09', 3),
+(4, 'Schneider', 'Tobias', '1988-12-04', 4),
+(5, 'Fischer', 'Sophie', '1995-07-19', 5),
+(6, 'Weber', 'Felix', '1983-01-10', 6),
+(7, 'Wagner', 'Nina', '1991-11-02', 7),
+(8, 'Becker', 'Jonas', '1997-04-17', 8),
+(9, 'Hoffmann', 'Emily', '1993-09-28', 9),
+(10, 'Schäfer', 'Leon', '1986-06-12', 10),
+(11, 'Koch', 'Mia', '1994-10-07', 11),
+(12, 'Richter', 'Tim', '1982-02-23', 12),
+(13, 'Klein', 'Marie', '1990-03-31', 13),
+(14, 'Wolf', 'Julian', '1996-12-15', 14),
+(15, 'Neumann', 'Clara', '1987-08-21', 15),
+(16, 'Schwarz', 'Max', '1993-05-11', 16),
+(17, 'Zimmermann', 'Lea', '1991-07-03', 17),
+(18, 'Braun', 'David', '1998-01-27', 18),
+(19, 'Krüger', 'Lena', '1989-11-18', 19),
+(20, 'Hofmann', 'Paul', '1984-09-05', 20),
+(21, 'Lange', 'Julia', '1992-06-14', 21),
+(22, 'Scholz', 'Fabian', '1986-04-25', 22),
+(23, 'Krämer', 'Marlene', '1997-03-10', 23),
+(24, 'Bauer', 'Simon', '1995-12-01', 24),
+(25, 'Peters', 'Isabel', '1990-07-08', 25);
+
+INSERT INTO Lieferant (lief_nr, name, adresse_id) VALUES
+(1, 'Frisch & Fein GmbH', 26),
+(2, 'BioMarkt AG', 27),
+(3, 'VeggiePlus Lieferdienste', 28),
+(4, 'Delikatessa Feinkost KG', 29),
+(5, 'GreenFood Logistics', 30);
