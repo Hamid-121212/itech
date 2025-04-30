@@ -1,28 +1,38 @@
-
--- Tabelle Ort (speichert die Städte)
+-- Städte (Ort)
 CREATE TABLE Ort (
   ort_id INT AUTO_INCREMENT PRIMARY KEY,
   stadt VARCHAR(255) NOT NULL
 );
 
--- Tabelle Plz (speichert die Postleitzahlen und verweist auf Ort)
-CREATE TABLE Plz (
-  plz_id INT AUTO_INCREMENT PRIMARY KEY,
-  plz VARCHAR(10) NOT NULL,
-  ort_id INT, 
-  FOREIGN KEY (ort_id) REFERENCES Ort(ort_id) ON DELETE CASCADE
-);
-
--- Tabelle Adresse (speichert Adressen und verweist auf Plz)
+-- Adresse (mit PLZ und Stadt-Verknüpfung)
 CREATE TABLE Adresse (
   adresse_id INT AUTO_INCREMENT PRIMARY KEY,
   strasse VARCHAR(255) NOT NULL,
   haus_nr VARCHAR(20) NOT NULL,
-  plz_id INT, 
-  FOREIGN KEY (plz_id) REFERENCES Plz(plz_id) ON DELETE SET NULL
+  plz VARCHAR(10) NOT NULL,
+  ort_id INT,
+  FOREIGN KEY (ort_id) REFERENCES Ort(ort_id) ON DELETE CASCADE
 );
 
--- Tabelle Naehrwert
+-- Kunde
+CREATE TABLE Kunde (
+  kd_nr INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  vorname VARCHAR(255) NOT NULL,
+  geburtsdatum DATE NOT NULL,  -- Keine CHECK-Constraint hier
+  adresse_id INT,
+  FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL
+);
+
+-- Lieferant
+CREATE TABLE Lieferant (
+  lief_nr INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  adresse_id INT,
+  FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL
+);
+
+-- Nährwerte
 CREATE TABLE Naehrwert (
   naehrwert_id INT AUTO_INCREMENT PRIMARY KEY,
   fett_pro_einheit FLOAT NOT NULL,
@@ -31,60 +41,27 @@ CREATE TABLE Naehrwert (
   protein FLOAT NOT NULL
 );
 
--- Tabelle Lieferant
-CREATE TABLE Lieferant (
-  lief_nr INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  adresse_id INT,
-  FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL
+-- Zutat
+CREATE TABLE Zutat (
+  zutat_id INT AUTO_INCREMENT PRIMARY KEY,
+  zutat_name VARCHAR(255) NOT NULL,
+  bestand INT NOT NULL,  -- Kein CHECK-Constraint
+  nettoergebnis FLOAT NOT NULL,  -- Kein CHECK-Constraint
+  mengeneinheit VARCHAR(50) NOT NULL,
+  naehrwert_id INT,
+  lief_nr INT,
+  co2_wert FLOAT DEFAULT 0,
+  FOREIGN KEY (naehrwert_id) REFERENCES Naehrwert(naehrwert_id) ON DELETE SET NULL,
+  FOREIGN KEY (lief_nr) REFERENCES Lieferant(lief_nr) ON DELETE SET NULL
 );
 
--- Tabelle Ernaehrungskategorie
+-- Ernährungskategorie
 CREATE TABLE Ernaehrungskategorie (
   kategorie_id INT AUTO_INCREMENT PRIMARY KEY,
   kategorie_name VARCHAR(255) NOT NULL
 );
 
--- Tabelle Allergen
-CREATE TABLE Allergen (
-  allergen_id INT AUTO_INCREMENT PRIMARY KEY,
-  allergen_name VARCHAR(255) NOT NULL
-);
-
--- Tabelle Kunde
-CREATE TABLE Kunde (
-  kd_nr INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  vorname VARCHAR(255) NOT NULL,
-  adresse_id INT,
-  geburtsdatum DATE NOT NULL,
-  FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL
-);
-
--- Tabelle Bestellung
-CREATE TABLE Bestellung (
-  bestell_nr INT AUTO_INCREMENT PRIMARY KEY,
-  kd_nr INT,
-  gesamtpreis FLOAT NOT NULL,
-  datum DATE NOT NULL,
-  FOREIGN KEY (kd_nr) REFERENCES Kunde(kd_nr) ON DELETE CASCADE
-);
-
--- Tabelle Zutat
-CREATE TABLE Zutat (
-  zutat_id INT AUTO_INCREMENT PRIMARY KEY,
-  zutat_name VARCHAR(255) NOT NULL,
-  bestand INT NOT NULL,
-  nettoergebnis FLOAT NOT NULL,
-  mengeneinheit VARCHAR(50) NOT NULL,
-  naehrwert_id INT,
-  lief_nr INT,
-  co2_wert FLOAT,
-  FOREIGN KEY (naehrwert_id) REFERENCES Naehrwert(naehrwert_id) ON DELETE SET NULL,
-  FOREIGN KEY (lief_nr) REFERENCES Lieferant(lief_nr) ON DELETE SET NULL
-);
-
--- Tabelle Rezept
+-- Rezept
 CREATE TABLE Rezept (
   rezept_id INT AUTO_INCREMENT PRIMARY KEY,
   rezept_name VARCHAR(255) NOT NULL,
@@ -92,34 +69,26 @@ CREATE TABLE Rezept (
   FOREIGN KEY (kategorie_id) REFERENCES Ernaehrungskategorie(kategorie_id) ON DELETE SET NULL
 );
 
--- Tabelle Zutat_allergen
-CREATE TABLE Zutat_allergen (
-  zutat_id INT,
-  allergen_id INT,
-  PRIMARY KEY (zutat_id, allergen_id),
-  FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE,
-  FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) ON DELETE CASCADE
-);
-
--- Tabelle Rezept_allergen
-CREATE TABLE Rezept_allergen (
+-- Rezept-Zutat (Mengenangaben)
+CREATE TABLE Rezept_zutat (
   rezept_id INT,
-  allergen_id INT,
-  PRIMARY KEY (rezept_id, allergen_id),
+  zutat_id INT,
+  menge FLOAT NOT NULL,  -- Keine CHECK-Bedingung
+  PRIMARY KEY (rezept_id, zutat_id),
   FOREIGN KEY (rezept_id) REFERENCES Rezept(rezept_id) ON DELETE CASCADE,
-  FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) ON DELETE CASCADE
+  FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE
 );
 
--- Tabelle Kunde_allergen
-CREATE TABLE Kunde_allergen (
+-- Bestellung
+CREATE TABLE Bestellung (
+  bestell_nr INT AUTO_INCREMENT PRIMARY KEY,
   kd_nr INT,
-  allergen_id INT,
-  PRIMARY KEY (kd_nr, allergen_id),
-  FOREIGN KEY (kd_nr) REFERENCES Kunde(kd_nr) ON DELETE CASCADE,
-  FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) ON DELETE CASCADE
+  datum DATE NOT NULL,
+  gesamtpreis FLOAT NOT NULL,  -- Kein CHECK-Constraint
+  FOREIGN KEY (kd_nr) REFERENCES Kunde(kd_nr) ON DELETE CASCADE
 );
 
--- Tabelle Bestellung_zutat
+-- Bestellung-Zutat
 CREATE TABLE Bestellung_zutat (
   bestell_nr INT,
   zutat_id INT,
@@ -128,12 +97,26 @@ CREATE TABLE Bestellung_zutat (
   FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE
 );
 
--- Tabelle Rezept_zutat
-CREATE TABLE Rezept_zutat (
-  rezept_id INT,
+-- Allergen
+CREATE TABLE Allergen (
+  allergen_id INT AUTO_INCREMENT PRIMARY KEY,
+  allergen_name VARCHAR(255) NOT NULL
+);
+
+-- Zutat-Allergen
+CREATE TABLE Zutat_allergen (
   zutat_id INT,
-  menge FLOAT NOT NULL,
-  PRIMARY KEY (rezept_id, zutat_id),
+  allergen_id INT,
+  PRIMARY KEY (zutat_id, allergen_id),
+  FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE,
+  FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) ON DELETE CASCADE
+);
+
+-- Rezept-Allergen
+CREATE TABLE Rezept_allergen (
+  rezept_id INT,
+  allergen_id INT,
+  PRIMARY KEY (rezept_id, allergen_id),
   FOREIGN KEY (rezept_id) REFERENCES Rezept(rezept_id) ON DELETE CASCADE,
-  FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE
+  FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) ON DELETE CASCADE
 );
