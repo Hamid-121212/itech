@@ -210,3 +210,131 @@ INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
 (8, 11, 2);   -- Salz (2g)
 
 
+-- Bestellungen
+INSERT INTO bestellung (bestell_nr, kd_nr, datum, gesamtpreis) VALUES
+(1, 1, '2025-01-15', 15.60),  -- Kunde 1, Januar
+(2, 2, '2025-01-20', 22.80),  -- Kunde 2, Januar
+(3, 3, '2025-02-02', 18.50),  -- Kunde 3, Februar
+(4, 4, '2025-02-05', 13.30),  -- Kunde 4, Februar
+(5, 5, '2025-03-10', 20.00),  -- Kunde 5, März
+(6, 6, '2025-03-15', 17.70),  -- Kunde 6, März
+(7, 7, '2025-03-18', 19.90),  -- Kunde 7, März
+(8, 8, '2025-03-22', 14.40),  -- Kunde 8, März
+(9, 9, '2025-03-25', 21.60),  -- Kunde 9, März
+(10, 10, '2025-03-30', 16.50), -- Kunde 10, März
+(11, 11, '2025-02-10', 18.20), -- Kunde 11, Februar
+(12, 12, '2025-02-15', 23.40), -- Kunde 12, Februar
+(13, 13, '2025-01-25', 17.30), -- Kunde 13, Januar
+(14, 14, '2025-01-30', 19.00), -- Kunde 14, Januar
+(15, 15, '2025-03-03', 20.50), -- Kunde 15, März
+(16, 16, '2025-03-05', 21.20), -- Kunde 16, März
+(17, 17, '2025-02-20', 18.60), -- Kunde 17, Februar
+(18, 18, '2025-02-25', 22.00), -- Kunde 18, Februar
+(19, 19, '2025-03-07', 14.80), -- Kunde 19, März
+(20, 20, '2025-03-12', 19.40); -- Kunde 20, März
+
+
+-- Bestellzutat
+INSERT INTO bestellung_zutat (bestell_nr, zutat_id) VALUES
+(1, 1),  -- Apfel
+(1, 2),  -- Gurke
+(1, 4),  -- Tomate
+(1, 7),  -- Karotte
+
+(2, 3),  -- Banane
+(2, 8),  -- Ei
+(2, 4),  -- Tomate
+(2, 5),  -- Käse
+(2, 9),  -- Paprika
+
+(3, 5),  -- Käse
+(3, 6),  -- Olivenöl
+(3, 7),  -- Karotte
+(3, 8),  -- Ei
+
+(4, 2),  -- Gurke
+(4, 11), -- Salz
+(4, 6),  -- Olivenöl
+(4, 12), -- Zwiebel
+
+(5, 1),  -- Apfel
+(5, 13), -- Tofu
+(5, 14), -- Spinat
+(5, 6),  -- Olivenöl
+
+(6, 15), -- Reis
+(6, 16), -- Linsen
+(6, 7),  -- Karotte
+(6, 11), -- Salz
+
+(7, 17), -- Kichererbsen
+(7, 18), -- Bulgur
+(7, 6),  -- Olivenöl
+(7, 2),  -- Gurke
+
+(8, 14), -- Spinat
+(8, 8),  -- Ei
+(8, 6),  -- Olivenöl
+(8, 4),  -- Tomate
+
+(9, 13), -- Tofu
+(9, 16), -- Linsen
+(9, 9),  -- Paprika
+(9, 2),  -- Gurke
+
+(10, 15), -- Reis
+(10, 12), -- Zwiebel
+(10, 19), -- Brokkoli
+(10, 10), -- Joghurt
+
+(11, 17), -- Kichererbsen
+(11, 3),  -- Banane
+(11, 8),  -- Ei
+(11, 9),  -- Paprika
+
+(12, 13), -- Tofu
+(12, 5),  -- Käse
+(12, 4),  -- Tomate
+(12, 10), -- Joghurt
+
+(13, 1),  -- Apfel
+(13, 2),  -- Gurke
+(13, 16), -- Linsen
+(13, 11), -- Salz
+
+(14, 6),  -- Olivenöl
+(14, 7),  -- Karotte
+(14, 18), -- Bulgur
+(14, 5),  -- Käse
+
+(15, 12), -- Zwiebel
+(15, 2),  -- Gurke
+(15, 19), -- Brokkoli
+(15, 8),  -- Ei
+
+(16, 3),  -- Banane
+(16, 17), -- Kichererbsen
+(16, 6),  -- Olivenöl
+(16, 4),  -- Tomate
+
+(17, 15), -- Reis
+(17, 7),  -- Karotte
+(17, 13), -- Tofu
+(17, 5),  -- Käse
+
+(18, 8),  -- Ei
+(18, 14), -- Spinat
+(18, 4),  -- Tomate
+(18, 19), -- Brokkoli
+
+(19, 10), -- Joghurt
+(19, 6),  -- Olivenöl
+(19, 7),  -- Karotte
+(19, 11), -- Salz
+
+(20, 9),  -- Paprika
+(20, 13), -- Tofu
+(20, 12), -- Zwiebel
+(20, 6);  -- Olivenöl
+
+
