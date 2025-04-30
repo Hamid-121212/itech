@@ -1,10 +1,8 @@
--- Städte (Ort)
 CREATE TABLE Ort (
   ort_id INT AUTO_INCREMENT PRIMARY KEY,
   stadt VARCHAR(255) NOT NULL
 );
 
--- Adresse (mit PLZ und Stadt-Verknüpfung)
 CREATE TABLE Adresse (
   adresse_id INT AUTO_INCREMENT PRIMARY KEY,
   strasse VARCHAR(255) NOT NULL,
@@ -14,7 +12,7 @@ CREATE TABLE Adresse (
   FOREIGN KEY (ort_id) REFERENCES Ort(ort_id) ON DELETE CASCADE
 );
 
--- Kunde
+
 CREATE TABLE Kunde (
   kd_nr INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -24,7 +22,7 @@ CREATE TABLE Kunde (
   FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL
 );
 
--- Lieferant
+
 CREATE TABLE Lieferant (
   lief_nr INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -32,7 +30,7 @@ CREATE TABLE Lieferant (
   FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL
 );
 
--- Nährwerte
+
 CREATE TABLE Naehrwert (
   naehrwert_id INT AUTO_INCREMENT PRIMARY KEY,
   fett_pro_einheit FLOAT NOT NULL,
@@ -41,7 +39,7 @@ CREATE TABLE Naehrwert (
   protein FLOAT NOT NULL
 );
 
--- Zutat
+
 CREATE TABLE Zutat (
   zutat_id INT AUTO_INCREMENT PRIMARY KEY,
   zutat_name VARCHAR(255) NOT NULL,
@@ -55,22 +53,22 @@ CREATE TABLE Zutat (
   FOREIGN KEY (lief_nr) REFERENCES Lieferant(lief_nr) ON DELETE SET NULL
 );
 
--- Ernährungskategorie
+
 CREATE TABLE Ernaehrungskategorie (
   kategorie_id INT AUTO_INCREMENT PRIMARY KEY,
   kategorie_name VARCHAR(255) NOT NULL
 );
 
--- Rezept (mit Zubereitung)
+
 CREATE TABLE Rezept (
   rezept_id INT AUTO_INCREMENT PRIMARY KEY,
   rezept_name VARCHAR(255) NOT NULL,
   kategorie_id INT,
-  zubereitung TEXT NOT NULL,  -- Neue Spalte für Zubereitung
+  zubereitung TEXT NOT NULL,
   FOREIGN KEY (kategorie_id) REFERENCES Ernaehrungskategorie(kategorie_id) ON DELETE SET NULL
 );
 
--- Rezept-Zutat (Mengenangaben)
+
 CREATE TABLE Rezept_zutat (
   rezept_id INT,
   zutat_id INT,
@@ -80,16 +78,16 @@ CREATE TABLE Rezept_zutat (
   FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE
 );
 
--- Bestellung
+
 CREATE TABLE Bestellung (
   bestell_nr INT AUTO_INCREMENT PRIMARY KEY,
   kd_nr INT,
   datum DATE NOT NULL,
-  gesamtpreis FLOAT NOT NULL,  -- Kein CHECK-Constraint
+  gesamtpreis FLOAT NOT NULL, 
   FOREIGN KEY (kd_nr) REFERENCES Kunde(kd_nr) ON DELETE CASCADE
 );
 
--- Bestellung-Zutat
+
 CREATE TABLE Bestellung_zutat (
   bestell_nr INT,
   zutat_id INT,
@@ -98,13 +96,13 @@ CREATE TABLE Bestellung_zutat (
   FOREIGN KEY (zutat_id) REFERENCES Zutat(zutat_id) ON DELETE CASCADE
 );
 
--- Allergen
+
 CREATE TABLE Allergen (
   allergen_id INT AUTO_INCREMENT PRIMARY KEY,
   allergen_name VARCHAR(255) NOT NULL
 );
 
--- Zutat-Allergen
+
 CREATE TABLE Zutat_allergen (
   zutat_id INT,
   allergen_id INT,
@@ -113,7 +111,7 @@ CREATE TABLE Zutat_allergen (
   FOREIGN KEY (allergen_id) REFERENCES Allergen(allergen_id) ON DELETE CASCADE
 );
 
--- Rezept-Allergen
+
 CREATE TABLE Rezept_allergen (
   rezept_id INT,
   allergen_id INT,
