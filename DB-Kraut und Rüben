@@ -1,4 +1,4 @@
-https://github.com/chris738
+
 -- Tabelle Ort (speichert die Städte)
 CREATE TABLE Ort (
   ort_id INT AUTO_INCREMENT PRIMARY KEY,
