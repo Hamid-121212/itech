@@ -168,3 +168,103 @@ BEGIN
     WHERE r.rezept_name = recipe_name;
 END //
 DELIMITER ;
+
+
+4. SQL-Abfragen
+Auswahl aller Zutaten eines Rezeptes nach Rezeptname
+sql
+Kopieren
+Bearbeiten
+SELECT z.zutat_name, rz.menge
+FROM Rezept_zutat rz
+JOIN Zutat z ON rz.zutat_id = z.zutat_id
+JOIN Rezept r ON rz.rezept_id = r.rezept_id
+WHERE r.rezept_name = 'Gemüsepfanne';
+Auswahl aller Rezepte einer bestimmten Ernährungskategorie
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Ernaehrungskategorie ek ON r.kategorie_id = ek.kategorie_id
+WHERE ek.kategorie_name = 'Vegan';
+Auswahl aller Rezepte, die eine gewisse Zutat enthalten
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN Zutat z ON rz.zutat_id = z.zutat_id
+WHERE z.zutat_name = 'Käse';
+Berechnung der durchschnittlichen Nährwerte aller Bestellungen eines Kunden
+sql
+Kopieren
+Bearbeiten
+SELECT 
+    kd.kd_nr,
+    AVG(n.fett_pro_einheit) AS avg_fett,
+    AVG(n.kalorien_pro_einheit) AS avg_kalorien,
+    AVG(n.kohlenhydrat_pro_einheit) AS avg_kohlenhydrate,
+    AVG(n.protein) AS avg_protein
+FROM Bestellung b
+JOIN Kunde kd ON b.kd_nr = kd.kd_nr
+JOIN Bestellung_zutat bz ON b.bestell_nr = bz.bestell_nr
+JOIN Zutat z ON bz.zutat_id = z.zutat_id
+JOIN Naehrwert n ON z.naehrwert_id = n.naehrwert_id
+GROUP BY kd.kd_nr;
+Auswahl aller Zutaten, die bisher keinem Rezept zugeordnet sind
+sql
+Kopieren
+Bearbeiten
+SELECT z.zutat_name
+FROM Zutat z
+LEFT JOIN Rezept_zutat rz ON z.zutat_id = rz.zutat_id
+WHERE rz.zutat_id IS NULL;
+Auswahl aller Rezepte, die eine bestimmte Kalorienmenge nicht überschreiten
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN Zutat z ON rz.zutat_id = z.zutat_id
+JOIN Naehrwert n ON z.naehrwert_id = n.naehrwert_id
+GROUP BY r.rezept_name
+HAVING SUM(n.kalorien_pro_einheit) <= 500;  -- Beispiel für 500 Kalorien
+Auswahl aller Rezepte, die weniger als fünf Zutaten enthalten
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+GROUP BY r.rezept_name
+HAVING COUNT(rz.zutat_id) < 5;
+Auswahl aller Rezepte, die weniger als fünf Zutaten enthalten und eine bestimmte Ernährungskategorie erfüllen
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN Ernaehrungskategorie ek ON r.kategorie_id = ek.kategorie_id
+GROUP BY r.rezept_name
+HAVING COUNT(rz.zutat_id) < 5 AND ek.kategorie_name = 'Vegan';
+Weitere SQL-Abfragen (Beispiel)
+Zeige alle Bestellungen eines bestimmten Kunden
+
+sql
+Kopieren
+Bearbeiten
+SELECT * FROM Bestellung WHERE kd_nr = 1;
+Zeige alle Allergene in einem Rezept
+
+sql
+Kopieren
+Bearbeiten
+SELECT a.allergen_name
+FROM Rezept_allergen ra
+JOIN Allergen a ON ra.allergen_id = a.allergen_id
+JOIN Rezept r ON ra.rezept_id = r.rezept_id
+WHERE r.rezept_name = 'Gemüsepfanne';
