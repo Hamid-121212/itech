@@ -1,0 +1,170 @@
+1. Auswahl aller Zutaten eines Rezeptes nach Rezeptname
+Ziel: Alle Zutaten eines bestimmten Rezepts anhand des Rezeptnamens auszuwählen.
+
+sql
+Kopieren
+Bearbeiten
+SELECT z.zutat_name, rz.menge
+FROM Zutat z
+JOIN Rezept_zutat rz ON z.zutat_id = rz.zutat_id
+JOIN Rezept r ON rz.rezept_id = r.rezept_id
+WHERE r.rezept_name = 'Gemüsesuppe';  -- Beispielrezept, ersetze mit dem gewünschten Namen
+2. Auswahl aller Rezepte einer bestimmten Ernährungskategorie
+Ziel: Alle Rezepte einer spezifischen Ernährungskategorie auszuwählen.
+
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Ernaehrungskategorie ek ON r.kategorie_id = ek.kategorie_id
+WHERE ek.kategorie_name = 'Vegetarisch';  -- Beispielkategorie, ersetze mit der gewünschten Kategorie
+3. Auswahl aller Rezepte, die eine gewisse Zutat enthalten
+Ziel: Alle Rezepte, die eine spezifische Zutat enthalten (z.B. 'Käse').
+
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN Zutat z ON rz.zutat_id = z.zutat_id
+WHERE z.zutat_name = 'Käse';  -- Ersetze mit der gewünschten Zutat
+4. Berechnung der durchschnittlichen Nährwerte aller Bestellungen eines Kunden
+Ziel: Die durchschnittlichen Nährwerte (z.B. Kalorien, Fettgehalt) aller Bestellungen eines bestimmten Kunden zu berechnen.
+
+sql
+Kopieren
+Bearbeiten
+SELECT 
+    AVG(n.fett_pro_einheit) AS avg_fett,
+    AVG(n.kalorien_pro_einheit) AS avg_kalorien,
+    AVG(n.kohlenhydrat_pro_einheit) AS avg_kohlenhydrate,
+    AVG(n.protein) AS avg_protein
+FROM Bestellung b
+JOIN Bestellung_zutat bz ON b.bestell_nr = bz.bestell_nr
+JOIN Zutat z ON bz.zutat_id = z.zutat_id
+JOIN Naehrwert n ON z.naehrwert_id = n.naehrwert_id
+WHERE b.kd_nr = 1;  -- Ersetze 1 mit der Kundennummer, für die du die Nährwerte berechnen möchtest
+5. Auswahl aller Zutaten, die bisher keinem Rezept zugeordnet sind
+Ziel: Zutaten, die keinem Rezept zugeordnet sind, zu ermitteln (left join auf Rezept_zutat).
+
+sql
+Kopieren
+Bearbeiten
+SELECT z.zutat_name
+FROM Zutat z
+LEFT JOIN Rezept_zutat rz ON z.zutat_id = rz.zutat_id
+WHERE rz.rezept_id IS NULL;
+6. Auswahl aller Rezepte, die eine bestimmte Kalorienmenge nicht überschreiten
+Ziel: Alle Rezepte zu finden, deren Gesamtkalorien eine vorgegebene Menge nicht überschreiten (z.B. 500 Kalorien).
+
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN Zutat z ON rz.zutat_id = z.zutat_id
+JOIN Naehrwert n ON z.naehrwert_id = n.naehrwert_id
+GROUP BY r.rezept_name
+HAVING SUM(n.kalorien_pro_einheit * rz.menge / 100) <= 500;  -- Gesamt-Kalorienmenge je nach Menge der Zutat
+7. Auswahl aller Rezepte, die weniger als fünf Zutaten enthalten
+Ziel: Alle Rezepte ausfindig zu machen, die weniger als fünf Zutaten haben.
+
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+GROUP BY r.rezept_name
+HAVING COUNT(rz.zutat_id) < 5;
+8. Auswahl aller Rezepte, die weniger als fünf Zutaten enthalten und eine bestimmte Ernährungskategorie erfüllen
+Ziel: Rezepte zu finden, die weniger als fünf Zutaten haben und einer bestimmten Kategorie angehören.
+
+sql
+Kopieren
+Bearbeiten
+SELECT r.rezept_name
+FROM Rezept r
+JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN Ernaehrungskategorie ek ON r.kategorie_id = ek.kategorie_id
+GROUP BY r.rezept_name
+HAVING COUNT(rz.zutat_id) < 5 AND ek.kategorie_name = 'Vegan';  -- Ersetze 'Vegan' mit der gewünschten Kategorie
+9. Drei weitere Abfragen
+Auswahl der Zutaten, die in den meisten Rezepten verwendet werden (mit INNER JOIN und Aggregatfunktionen)
+Ziel: Finden, welche Zutaten am häufigsten in Rezepten verwendet werden.
+
+sql
+Kopieren
+Bearbeiten
+SELECT z.zutat_name, COUNT(rz.rezept_id) AS anzahl_rezepte
+FROM Zutat z
+JOIN Rezept_zutat rz ON z.zutat_id = rz.zutat_id
+GROUP BY z.zutat_name
+ORDER BY anzahl_rezepte DESC;
+Auswahl der Bestellungen, die eine bestimmte Zutat enthalten (mit LEFT JOIN)
+Ziel: Bestellungen anzeigen, in denen eine bestimmte Zutat vorkommt.
+
+sql
+Kopieren
+Bearbeiten
+SELECT b.bestell_nr, b.datum
+FROM Bestellung b
+LEFT JOIN Bestellung_zutat bz ON b.bestell_nr = bz.bestell_nr
+LEFT JOIN Zutat z ON bz.zutat_id = z.zutat_id
+WHERE z.zutat_name = 'Olivenöl';  -- Ersetze 'Olivenöl' mit der gewünschten Zutat
+Auswahl der durchschnittlichen Bestellwerte pro Kunde (mit Aggregatfunktionen)
+Ziel: Durchschnittliche Bestellwerte je Kunde anzeigen.
+
+sql
+Kopieren
+Bearbeiten
+SELECT b.kd_nr, AVG(b.gesamtpreis) AS avg_bestellwert
+FROM Bestellung b
+GROUP BY b.kd_nr
+ORDER BY avg_bestellwert DESC;
+10. Stored Procedures für FIAE/FIDP
+1. Stored Procedure: Berechnung des durchschnittlichen Bestellwerts eines Kunden
+sql
+Kopieren
+Bearbeiten
+DELIMITER //
+CREATE PROCEDURE GetAvgOrderValue(IN customer_id INT)
+BEGIN
+    SELECT AVG(gesamtpreis) AS avg_order_value
+    FROM Bestellung
+    WHERE kd_nr = customer_id;
+END //
+DELIMITER ;
+2. Stored Procedure: Auswahl von Rezepten nach Kalorienlimit
+sql
+Kopieren
+Bearbeiten
+DELIMITER //
+CREATE PROCEDURE GetRecipesByCalories(IN calorie_limit INT)
+BEGIN
+    SELECT r.rezept_name
+    FROM Rezept r
+    JOIN Rezept_zutat rz ON r.rezept_id = rz.rezept_id
+    JOIN Zutat z ON rz.zutat_id = z.zutat_id
+    JOIN Naehrwert n ON z.naehrwert_id = n.naehrwert_id
+    GROUP BY r.rezept_name
+    HAVING SUM(n.kalorien_pro_einheit * rz.menge / 100) <= calorie_limit;
+END //
+DELIMITER ;
+3. Stored Procedure: Auswahl der Zutaten eines bestimmten Rezeptes
+sql
+Kopieren
+Bearbeiten
+DELIMITER //
+CREATE PROCEDURE GetIngredientsByRecipe(IN recipe_name VARCHAR(255))
+BEGIN
+    SELECT z.zutat_name
+    FROM Zutat z
+    JOIN Rezept_zutat rz ON z.zutat_id = rz.zutat_id
+    JOIN Rezept r ON rz.rezept_id = r.rezept_id
+    WHERE r.rezept_name = recipe_name;
+END //
+DELIMITER ;
