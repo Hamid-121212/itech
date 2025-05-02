@@ -147,76 +147,7 @@ INSERT INTO rezept (rezept_id, rezept_name, kategorie_id, zubereitung) VALUES
 (7, 'Spinat-Tofu-Pfanne', 2, 'Spinat in Pfanne dünsten, Tofu anbraten, beides mischen und würzen.'),
 (8, 'Brokkoli-Reispfanne mit Joghurt', 4, 'Reis kochen, Brokkoli dünsten, mit Naturjoghurt vermengen und mit Salz & Pfeffer abschmecken.');
 (9, 'Bunter Gemüse-Reis', 1,'Reis kochen. Gemüse (Karotte, Brokkoli, Mais, Paprika, Zwiebel, Spinat) klein schneiden und anbraten. Alles vermengen und mit Gewürzen abschmecken.')
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
--- Rezept 1: Gemischter Gemüse-Salat
-(1, 2, 50),   -- Gurke (50g)
-(1, 4, 50),   -- Tomate (50g)
-(1, 9, 40),   -- Paprika (40g)
-(1, 12, 20),  -- Zwiebel (20g)
-(1, 6, 10),   -- Olivenöl (10ml)
-(1, 11, 2)   -- Salz (2g)
 
--- Rezept 2: Veganes Linsencurry
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(2, 16, 80),  -- Linsen (80g)
-(2, 12, 30),  -- Zwiebel (30g)
-(2, 7, 40),   -- Karotte (40g)
-(2, 4, 50),   -- Tomate (50g)
-(2, 6, 10),   -- Olivenöl (10ml)
-(2, 11, 2)  -- Salz (2g)
-
--- Rezept 3: Tofu-Gemüsepfanne
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(3, 13, 100), -- Tofu (100g)
-(3, 9, 50),   -- Paprika (50g)
-(3, 19, 60),  -- Brokkoli (60g)
-(3, 6, 15),   -- Olivenöl (15ml)
-(3, 11, 2)   -- Salz (2g)
-
--- Rezept 4: Reis mit Spinat und Ei
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(4, 15, 80),  -- Reis (80g)
-(4, 14, 50),  -- Spinat (50g)
-(4, 8, 1),    -- Ei (1 Stück)
-(4, 11, 2)   -- Salz (2g)
-
--- Rezept 5: Kichererbsen-Bulgur-Salat
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(5, 17, 70),  -- Kichererbsen (70g)
-(5, 18, 60),  -- Bulgur (60g)
-(5, 4, 40),   -- Tomate (40g)
-(5, 2, 40),   -- Gurke (40g)
-(5, 6, 10)   -- Olivenöl (10ml)
-
--- Rezept 6: Low-Carb Gemüseomelett
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(6, 8, 2),    -- Ei (2 Stück)
-(6, 9, 40),   -- Paprika (40g)
-(6, 12, 20),  -- Zwiebel (20g)
-(6, 4, 30)   -- Tomate (30g)
-
--- Rezept 7: Spinat-Tofu-Pfanne
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(7, 14, 60),  -- Spinat (60g)
-(7, 13, 100), -- Tofu (100g)
-(7, 6, 10),   -- Olivenöl (10ml)
-(7, 11, 2)   -- Salz (2g)
-
--- Rezept 8: Brokkoli-Reispfanne mit Joghurt
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(8, 15, 80),  -- Reis (80g)
-(8, 19, 60),  -- Brokkoli (60g)
-(8, 10, 100), -- Joghurt (100g)
-(8, 11, 2);   -- Salz (2g)
-
-INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
-(9, 15, 100.0),   -- Reis
-(9, 7, 50.0),     -- Karotte
-(9, 19, 80.0),    -- Brokkoli
-(9, 20, 50.0),    -- Mais
-(9, 9, 60.0),     -- Paprika
-(9, 12, 30.0),    -- Zwiebel
-(9, 14, 40.0);   -- Spinat
 
 
 
@@ -242,6 +173,73 @@ INSERT INTO bestellung (bestell_nr, kd_nr, datum, gesamtpreis) VALUES
 (18, 18, '2025-02-25', 22.00), -- Kunde 18, Februar
 (19, 19, '2025-03-07', 14.80), -- Kunde 19, März
 (20, 20, '2025-03-12', 19.40); -- Kunde 20, März
+
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+-- 1. Gemischter Gemüse-Salat
+(1, 2, '50 g'),    -- Gurke
+(1, 4, '50 g'),    -- Tomate
+(1, 9, '40 g'),    -- Paprika
+(1, 12, '20 g'),   -- Zwiebel
+(1, 6, '10 g'),    -- Olivenöl
+(1, 11, '2 g')    -- Salz
+
+-- 2. Veganes Linsencurry
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(2, 16, '100 g'),  -- Linsen
+(2, 12, '20 g'),   -- Zwiebel
+(2, 7, '30 g'),    -- Karotte
+(2, 4, '40 g'),    -- Tomate
+(2, 6, '10 g')    -- Olivenöl
+
+-- 3. Tofu-Gemüsepfanne
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(3, 13, '100 g'),  -- Tofu
+(3, 9, '50 g'),    -- Paprika
+(3, 19, '80 g')   -- Brokkoli
+
+-- 4. Reis mit Spinat und Ei
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(4, 15, '100 g'),  -- Reis
+(4, 14, '60 g'),   -- Spinat
+(4, 8, '1 Stück'), -- Ei (1 Stück)
+(4, 11, '2 g')    -- Salz
+
+-- 5. Kichererbsen-Bulgur-Salat
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(5, 17, '80 g'),   -- Kichererbsen
+(5, 18, '80 g'),   -- Bulgur
+(5, 4, '40 g'),    -- Tomate
+(5, 2, '40 g'),    -- Gurke
+(5, 6, '10 g')    -- Olivenöl
+
+-- 6. Low-Carb Gemüseomelett
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(6, 8, '2 Stück'),  -- Ei (2 Stück)
+(6, 9, '40 g'),    -- Paprika
+(6, 12, '20 g'),   -- Zwiebel
+(6, 4, '30 g')    -- Tomate
+
+-- 7. Spinat-Tofu-Pfanne
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(7, 14, '80 g'),   -- Spinat
+(7, 13, '100 g')  -- Tofu
+
+-- 8. Brokkoli-Reispfanne mit Joghurt
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(8, 15, '100 g'),  -- Reis
+(8, 19, '80 g'),   -- Brokkoli
+(8, 10, '60 g'),   -- Joghurt
+(8, 11, '2 g')    -- Salz
+
+-- 9. Bunter Gemüse-Reis
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(9, 15, '100 g'),  -- Reis
+(9, 7, '50 g'),    -- Karotte
+(9, 19, '80 g'),   -- Brokkoli
+(9, 20, '50 g'),   -- Mais
+(9, 9, '60 g'),    -- Paprika
+(9, 12, '30 g'),   -- Zwiebel
+(9, 14, '40 g');   -- Spinat
 
 
 -- Bestellzutat
