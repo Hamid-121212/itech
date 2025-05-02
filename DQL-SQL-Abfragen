@@ -1,0 +1,173 @@
+ --Zutaten eines Rezepts anhand des Rezeptnamens abzurufen
+SELECT 
+    r.rezept_name,
+    z.zutat_name,
+    rz.menge,
+    r.zubereitung
+
+FROM 
+    rezept r
+JOIN 
+    rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN 
+    zutat z ON rz.zutat_id = z.zutat_id
+WHERE 
+    r.rezept_name = 'Gemischter Gemüse-Salat';
+
+--alle Rezepte einer bestimmten Ernährungskategorie
+SELECT 
+    r.rezept_name,
+    ek.kategorie_name,
+    r.zubereitung
+FROM 
+    rezept r
+JOIN 
+    ernaehrungskategorie ek ON r.kategorie_id = ek.kategorie_id
+WHERE 
+    ek.kategorie_name = 'Vegan';
+
+--Rezepte aufzulisten, die eine bestimmte Zutat enthalten
+SELECT 
+    r.rezept_name,
+    z.zutat_name,
+    rz.menge
+FROM 
+    rezept r
+JOIN 
+    rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN 
+    zutat z ON rz.zutat_id = z.zutat_id
+WHERE 
+    z.zutat_name = 'Tomate';
+
+--durchschnittlichen Nährwerte aller in den Bestellungen eines bestimmten Kunden enthaltenen Zutaten
+SELECT 
+    k.kd_nr,
+    k.name,
+    k.vorname,
+    AVG(n.fett_pro_100g) AS durchschnitt_fett,
+    AVG(n.kalorien_pro_100g) AS durchschnitt_kalorien,
+    AVG(n.kohlenhydrat_pro_100g) AS durchschnitt_kohlenhydrate,
+    AVG(n.protein) AS durchschnitt_protein
+FROM 
+    kunde k
+JOIN 
+    bestellung b ON k.kd_nr = b.kd_nr
+JOIN 
+    bestellung_zutat bz ON b.bestell_nr = bz.bestell_nr
+JOIN 
+    zutat z ON bz.zutat_id = z.zutat_id
+JOIN 
+    naehrwert n ON z.naehrwert_id = n.naehrwert_id
+WHERE 
+    k.kd_nr = 1
+GROUP BY 
+    k.kd_nr, k.name, k.vorname;
+
+--Zutaten aufzulisten, die in keinem Rezept verwendet werden
+SELECT 
+    z.zutat_id,
+    z.zutat_name
+FROM 
+    zutat z
+LEFT JOIN 
+    rezept_zutat rz ON z.zutat_id = rz.zutat_id
+WHERE 
+    rz.rezept_id IS NULL;
+
+--Drei sinnvolle SQL-Abfragen
+--Nummer1(Liste aller Kunden mit ihrer Stadt und Postleitzahl)
+SELECT 
+    k.kd_nr,
+    k.vorname,
+    k.name,
+    a.strasse,
+    a.haus_nr,
+    a.plz,
+    o.stadt
+FROM 
+    kunde k
+JOIN 
+    adresse a ON k.adresse_id = a.adresse_id
+JOIN 
+    ort o ON a.ort_id = o.ort_id;
+
+--Nummer2(Welche Lieferanten liefern Zutaten mit einem CO₂-Wert über 2.0 pro 100g?)
+SELECT 
+    l.name AS lieferant,
+    z.zutat_name,
+    z.co2_wert_pro100g
+FROM 
+    lieferant l
+JOIN 
+    zutat z ON l.lief_nr = z.lief_nr
+WHERE 
+    z.co2_wert_pro100g > 2.0;
+
+--Nummer3(Wie oft wurde eine bestimmte Zutat insgesamt in Bestellungen verwendet?)
+SELECT 
+    z.zutat_name,
+    COUNT(bz.bestell_nr) AS anzahl_bestellungen
+FROM 
+    zutat z
+JOIN 
+    bestellung_zutat bz ON z.zutat_id = bz.zutat_id
+GROUP BY 
+    z.zutat_id, z.zutat_name
+ORDER BY 
+    anzahl_bestellungen DESC;
+
+ --Abfrage mit INNER JOIN(Alle Rezepte mit zugehöriger Ernährungskategorie)
+SELECT 
+    r.rezept_name,
+    e.kategorie_name
+FROM 
+    rezept r
+INNER JOIN 
+    ernaehrungskategorie e ON r.kategorie_id = e.kategorie_id;
+
+--Abfrage mit LEFT JOIN(Alle Zutaten und ob sie in einem Rezept verwendet werden oder nicht)
+SELECT 
+    z.zutat_name,
+    rz.rezept_id
+FROM 
+    zutat z
+LEFT JOIN 
+    rezept_zutat rz ON z.zutat_id = rz.zutat_id
+ORDER BY 
+    z.zutat_name;
+
+--Abfrage mit Subselect(Rezepte, die Zutat mit dem höchsten CO₂-Wert enthalten)
+SELECT 
+    r.rezept_name,
+    z.zutat_name,
+    z.co2_wert_pro100g
+FROM 
+    rezept r
+JOIN 
+    rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN 
+    zutat z ON rz.zutat_id = z.zutat_id
+WHERE 
+    z.co2_wert_pro100g = (
+        SELECT MAX(co2_wert_pro100g)
+        FROM zutat
+    );
+
+--Abfrage mit Aggregatfunktionen(Durchschnittlicher Kaloriengehalt pro Rezept)
+SELECT 
+    r.rezept_name,
+    ROUND(SUM(n.kalorien_pro_100g * CAST(SUBSTRING_INDEX(rz.menge, ' ', 1) AS DECIMAL(10,2)) / 100), 2) AS gesamt_kalorien
+FROM 
+    rezept r
+JOIN 
+    rezept_zutat rz ON r.rezept_id = rz.rezept_id
+JOIN 
+    zutat z ON rz.zutat_id = z.zutat_id
+JOIN 
+    naehrwert n ON z.naehrwert_id = n.naehrwert_id
+WHERE 
+    rz.menge LIKE '%g'
+GROUP BY 
+    r.rezept_id, r.rezept_name;
+
