@@ -146,7 +146,7 @@ INSERT INTO rezept (rezept_id, rezept_name, kategorie_id, zubereitung) VALUES
 (6, 'Low-Carb Gemüseomelett', 5, 'Eier verquirlen, mit Paprika, Zwiebeln und Tomaten in Pfanne anbraten und stocken lassen.'),
 (7, 'Spinat-Tofu-Pfanne', 2, 'Spinat in Pfanne dünsten, Tofu anbraten, beides mischen und würzen.'),
 (8, 'Brokkoli-Reispfanne mit Joghurt', 4, 'Reis kochen, Brokkoli dünsten, mit Naturjoghurt vermengen und mit Salz & Pfeffer abschmecken.');
-
+(9, 'Bunter Gemüse-Reis', 1,'Reis kochen. Gemüse (Karotte, Brokkoli, Mais, Paprika, Zwiebel, Spinat) klein schneiden und anbraten. Alles vermengen und mit Gewürzen abschmecken.')
 INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
 -- Rezept 1: Gemischter Gemüse-Salat
 (1, 2, 50),   -- Gurke (50g)
@@ -208,6 +208,16 @@ INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
 (8, 19, 60),  -- Brokkoli (60g)
 (8, 10, 100), -- Joghurt (100g)
 (8, 11, 2);   -- Salz (2g)
+
+INSERT INTO rezept_zutat (rezept_id, zutat_id, menge) VALUES
+(9, 15, 100.0),   -- Reis
+(9, 7, 50.0),     -- Karotte
+(9, 19, 80.0),    -- Brokkoli
+(9, 20, 50.0),    -- Mais
+(9, 9, 60.0),     -- Paprika
+(9, 12, 30.0),    -- Zwiebel
+(9, 14, 40.0);   -- Spinat
+
 
 
 -- Bestellungen
