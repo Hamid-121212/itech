@@ -16,7 +16,7 @@ CREATE TABLE Kunde (
   kd_nr INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   vorname VARCHAR(255) NOT NULL,
-  geburtsdatum DATE NOT NULL,  -- Keine CHECK-Constraint hier
+  geburtsdatum DATE NOT NULL, 
   adresse_id INT,
   FOREIGN KEY (adresse_id) REFERENCES Adresse(adresse_id) ON DELETE SET NULL);
 
